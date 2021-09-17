@@ -6,6 +6,11 @@ const path = require("path");
 const ctrlProducts = require("../controllers/products");
 const ctrlCategories = require("../controllers/categories");
 const ctrlStock = require("../controllers/stock");
+const ctrlRequests = require("../controllers/requests");
+const ctrlStockin = require("../controllers/stockin");
+const ctrlStockout = require("../controllers/stockout");
+const ctrlAdmin = require("../controllers/admin");
+const ctrlWarehouse = require("../controllers/warehouse");
 
 // multer configuration for save image product
 const storage_img_products = multer.diskStorage({
@@ -37,6 +42,24 @@ router.get('/categories', ctrlCategories.all);
 // stock operasional
 router.get('/stocks', ctrlStock.all);
 
+// request
+router.get('/requests', ctrlRequests.all);
+router.get('/requests/warehouse', ctrlRequests.warehouse);
+
+// stock in
+router.get('/stockin', ctrlStockin.all);
+router.get('/stockin/warehouse', ctrlStockin.warehouse);
+
+// stock out
+router.get('/stockout', ctrlStockout.all);
+router.get('/stockout/warehouse', ctrlStockout.warehouse);
+router.get('/stockout/users', ctrlStockout.users);
+
+// admin
+router.get('/admin', ctrlAdmin.all);
+
+// warehouse
+router.get('/warehouse', ctrlWarehouse.all);
 
 module.exports = router;
 
