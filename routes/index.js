@@ -5,6 +5,7 @@ const path = require("path");
 
 const ctrlProducts = require("../controllers/products");
 const ctrlCategories = require("../controllers/categories");
+const ctrlStock = require("../controllers/stock");
 
 // multer configuration for save image product
 const storage_img_products = multer.diskStorage({
@@ -32,6 +33,9 @@ router.post('/products/update/:id', upload_img_product.single("picture"), ctrlPr
 router.get('/products', ctrlProducts.all);
 // category
 router.get('/categories', ctrlCategories.all);
+
+// stock operasional
+router.get('/stocks', ctrlStock.all);
 
 
 module.exports = router;
