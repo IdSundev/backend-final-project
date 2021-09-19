@@ -9,3 +9,28 @@ exports.all = async (req, res) => {
     return;
   });
 };
+
+exports.add = async (req, res) => {
+  let data = await {
+    id_village: req.body.id_village,
+    detail_address: req.body.detail_address,
+    other_detail: req.body.other_detail,
+    profile: req.file.filename
+  };
+  let result = Warehouse.insert(data);
+  result
+    .then((result) => {
+      res.json({
+        status: 200,
+        success: true,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        status: 500,
+        success: false,
+        message: err,
+      });
+    });
+  return;
+};

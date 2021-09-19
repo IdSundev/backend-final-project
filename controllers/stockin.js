@@ -6,7 +6,7 @@ exports.all = async (req, res) => {
   let amountOfData, amountOfPage, previous, next, position, page;
   let id_warehouse = req.query.id_warehouse;
   let pages = [];
-  let limit = 10;
+  let limit = 8;
 
   Stockin.countStockin(id_warehouse).then((result) => {
     amountOfData = result;
@@ -71,3 +71,30 @@ exports.warehouse = async (req,res) => {
     return;
   });
 }
+
+exports.detail = async (req, res) => {
+  let data = {
+    id_stockin: req.params.id,
+  };
+  let result = Stockin.detailStockin(data);
+  result
+    .then(function (result) {
+      if (result.length > 0) {
+        res.json({
+          status: 200,
+          request: result,
+        });
+      } else {
+        res.json({
+          status: 500,
+          message: err,
+        });
+      }
+    })
+    .catch(function (err) {
+      res.json({
+        status: 500,
+        message: err,
+      });
+    });
+};

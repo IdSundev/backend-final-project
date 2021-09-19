@@ -1,4 +1,4 @@
-const Stockout = require("../models/stockoutModel");
+const Requestsin = require("../models/requestsinModel");
 const platform = require("../platform");
 
 exports.all = async (req, res) => {
@@ -8,7 +8,7 @@ exports.all = async (req, res) => {
   let pages = [];
   let limit = 10;
 
-  Stockout.countStockout(id_warehouse).then((result) => {
+  Requestsin.countRequestsin(id_warehouse).then((result) => {
     amountOfData = result;
     amountOfPage = Math.ceil(amountOfData / limit);
     page = !req.query.page
@@ -46,11 +46,11 @@ exports.all = async (req, res) => {
       position,
       id_warehouse,
     };
-    let selectStockout = Stockout.selectStockout(data);
-    selectStockout.then((result) => {
+    let selectRequestsin = Requestsin.selectRequestsin(data);
+    selectRequestsin.then((result) => {
       res.json({
         page: page,
-        stockout: result,
+        requestin: result,
         links: {
           first_page: 1,
           previous: previous,
@@ -65,17 +65,8 @@ exports.all = async (req, res) => {
 
 exports.warehouse = async (req,res) => {
   // Select All Warehouse
-  let selectAllWarehouse = Stockout.selectAllWarehouse();
+  let selectAllWarehouse = Requestsin.selectAllWarehouse();
   selectAllWarehouse.then((result) => {
-    res.json(result);
-    return;
-  });
-}
-
-exports.users = async (req,res) => {
-  // Select All Warehouse
-  let selectAllUsers = Stockout.selectAllUsers();
-  selectAllUsers.then((result) => {
     res.json(result);
     return;
   });
@@ -83,9 +74,9 @@ exports.users = async (req,res) => {
 
 exports.detail = async (req, res) => {
   let data = {
-    id_stock_out: req.params.id,
+    id_request: req.params.id,
   };
-  let result = Stockout.detailStockout(data);
+  let result = Requestsin.detailRequestin(data);
   result
     .then(function (result) {
       if (result.length > 0) {
@@ -106,4 +97,51 @@ exports.detail = async (req, res) => {
         message: err,
       });
     });
+};
+
+exports.accepted = async (req, res) => {
+  let data = await {
+    id_request: req.body.id_request,
+  };
+  // console.log(data)
+  let result = Requestsin.accepted(data);
+  result
+    .then((result) => {
+      res.json({
+        status: 200,
+        success: true,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        status: 500,
+        success: false,
+        message: err,
+      });
+    });
+  return;
+};
+
+exports.reject = async (req, res) => {
+  let data = await {
+    id_request: req.body.id_request,
+    reason_for_reject: req.body.reason_for_reject,
+  };
+  // console.log(data)
+  let result = Requestsin.reject(data);
+  result
+    .then((result) => {
+      res.json({
+        status: 200,
+        success: true,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        status: 500,
+        success: false,
+        message: err,
+      });
+    });
+  return;
 };

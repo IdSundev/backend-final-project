@@ -1,8 +1,8 @@
 const Admin = require("../models/adminModel");
+const bcrypt = require("../lib/bcrypt");
 const platform = require("../platform");
 
 exports.all = async (req, res) => {
-
   let amountOfData, amountOfPage, previous, next, position, page;
   let pages = [];
   let limit = 10;
@@ -42,7 +42,7 @@ exports.all = async (req, res) => {
     position = page === 1 ? 0 : (page - 1) * limit;
     let data = {
       limit,
-      position
+      position,
     };
     let selectAdmin = Admin.selectAdmin(data);
     selectAdmin.then((result) => {
@@ -59,4 +59,32 @@ exports.all = async (req, res) => {
       });
     });
   });
+};
+
+exports.add = async (req, res) => {
+  let data = await {
+    id_warehouse: req.body.id_warehouse,
+    username: req.body.username,
+    email: req.body.email,
+    password: bcrypt.Encrypt(req.body.password),
+    full_name: req.body.full_name,
+    gender: req.body.gender,
+    contact: req.body.contact
+  };
+  let result = Admin.insert(data);
+  result
+    .then((result) => {
+      res.json({
+        status: 200,
+        success: true,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        status: 500,
+        success: false,
+        message: err,
+      });
+    });
+  return;
 };
