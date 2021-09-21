@@ -95,3 +95,14 @@ exports.update = (data) => {
     });
   });
 };
+
+exports.selectAll = (data) => {
+  return new Promise((resolve, reject) => {
+    // let sql = `SELECT * FROM users WHERE token='${data.token}'`;
+    let sql = `SELECT * FROM PRODUCTS`;
+    pool.query(sql, (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+};

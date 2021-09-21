@@ -53,3 +53,14 @@ exports.detailStockout = (data) => {
     });
   });
 };
+
+exports.insert = (data) => {
+  return new Promise((resolve, reject) => {
+    let sql = `INSERT INTO stock_going_out(id_original_warehouse,id_destination_warehouse,id_user,item_out_date,description) values(${data.id_original_warehouse},${data.id_destination_warehouse},${data.id_user},'${data.item_out_date}','${data.description}')`;
+
+    pool.query(sql, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  });
+};

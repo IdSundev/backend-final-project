@@ -204,3 +204,12 @@ exports.update = async (req, res) => {
     });
   return;
 };
+
+exports.selectAll = async (req, res) => {
+  // Select All
+  let selectAll = Products.selectAll();
+  selectAll.then((result) => {
+    res.json(result);
+    return;
+  });
+};

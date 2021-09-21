@@ -107,3 +107,30 @@ exports.detail = async (req, res) => {
       });
     });
 };
+
+exports.add = async (req, res) => {
+  let data = await {
+    id_original_warehouse: req.body.id_original_warehouse,
+    id_destination_warehouse: req.body.id_destination_warehouse,
+    id_user: req.body.id_user,
+    item_out_date: req.body.item_out_date,
+    description: req.body.description
+  };
+  let result = Stockout.insert(data);
+  result
+    .then((result) => {
+      res.json({
+        status: 200,
+        success: true,
+        id_stock_out: result.insertId
+      });
+    })
+    .catch((err) => {
+      res.json({
+        status: 500,
+        success: false,
+        message: err,
+      });
+    });
+  return;
+};

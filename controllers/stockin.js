@@ -98,3 +98,29 @@ exports.detail = async (req, res) => {
       });
     });
 };
+
+exports.add = async (req, res) => {
+  let data = await {
+    id_original_warehouse: req.body.id_original_warehouse,
+    id_destination_warehouse: req.body.id_destination_warehouse,
+    date_of_entry: req.body.date_of_entry,
+    description: req.body.description
+  };
+  let result = Stockin.insert(data);
+  result
+    .then((result) => {
+      res.json({
+        status: 200,
+        success: true,
+        id_stock_in: result.insertId
+      });
+    })
+    .catch((err) => {
+      res.json({
+        status: 500,
+        success: false,
+        message: err,
+      });
+    });
+  return;
+};

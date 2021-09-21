@@ -42,3 +42,14 @@ exports.detailStockin = (data) => {
     });
   });
 };
+
+exports.insert = (data) => {
+  return new Promise((resolve, reject) => {
+    let sql = `INSERT INTO stock_going_in(id_original_warehouse,id_destination_warehouse,date_of_entry,description) values(${data.id_original_warehouse},${data.id_destination_warehouse},'${data.date_of_entry}','${data.description}')`;
+
+    pool.query(sql, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  });
+};

@@ -62,3 +62,81 @@ exports.all = async (req, res) => {
     });
   });
 };
+
+exports.detail = async (req, res) => {
+  let data = {
+    id_warehouse: req.query.id_warehouse,
+    id_product: req.query.id_product,
+  };
+  let result = Stocks.detailStock(data);
+  result
+    .then(function (result) {
+      if (result.length > 0) {
+        res.json({
+          status: 200,
+          stock: result,
+        });
+      } else {
+        res.json({
+          status: 500,
+          message: err,
+        });
+      }
+    })
+    .catch(function (err) {
+      res.json({
+        status: 500,
+        message: err,
+      });
+    });
+};
+
+exports.add = async (req, res) => {
+  let data = await {
+    id_warehouse: req.body.id_warehouse,
+    id_product: req.body.id_product,
+    available: req.body.available,
+    non_available: req.body.non_available
+  };
+  let result = Stocks.insert(data);
+  result
+    .then((result) => {
+      res.json({
+        status: 200,
+        success: true,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        status: 500,
+        success: false,
+        message: err,
+      });
+    });
+  return;
+};
+
+exports.update = async (req, res) => {
+  let data = await {
+    id_stock: req.body.id_stock,
+    available: req.body.available,
+    non_available: req.body.non_available
+  };
+  // console.log(data)
+  let result = Stocks.update(data);
+  result
+    .then((result) => {
+      res.json({
+        status: 200,
+        success: true,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        status: 500,
+        success: false,
+        message: err,
+      });
+    });
+  return;
+};

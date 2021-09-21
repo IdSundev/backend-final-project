@@ -19,6 +19,7 @@ const ctrlVillage = require("../controllers/village");
 const ctrlRequestDetail = require("../controllers/request_detail");
 const ctrlStockinDetail = require("../controllers/stockin_detail");
 const ctrlStockoutDetail = require("../controllers/stockout_detail");
+const ctrlUsers = require("../controllers/users");
 
 // multer configuration for save image product
 const storage_img_products = multer.diskStorage({
@@ -54,11 +55,13 @@ const storage_img_warehouse = multer.diskStorage({
 })
 const upload_img_warehouse = multer({storage: storage_img_warehouse});
 
-
+// users
+router.get('/users/all', ctrlUsers.selectAll);
 
 // products
 router.post('/products/add', upload_img_product.single("picture"), ctrlProducts.add);
 router.post('/products/delete', ctrlProducts.delete);
+router.get('/products/all', ctrlProducts.selectAll);
 router.get('/products/select', ctrlProducts.selectOne);
 router.get('/products/edit/:id', ctrlProducts.edit);
 router.post('/products/update/:id', upload_img_product.single("picture"), ctrlProducts.update);
@@ -68,6 +71,9 @@ router.get('/categories', ctrlCategories.all);
 
 // stock operasional
 router.get('/stocks', ctrlStock.all);
+router.post('/stocks', ctrlStock.add);
+router.post('/stocks/update', ctrlStock.update);
+router.get('/stocks/detail', ctrlStock.detail);
 
 // request
 router.get('/requests', ctrlRequests.all);
@@ -83,12 +89,14 @@ router.post('/requestin/reject', ctrlRequestsin.reject);
 
 // stock in
 router.get('/stockin', ctrlStockin.all);
+router.post('/stockin', ctrlStockin.add);
 router.get('/stockin/warehouse', ctrlStockin.warehouse);
 router.get('/stockin/detail/:id', ctrlStockin.detail);
 
 
 // stock out
 router.get('/stockout', ctrlStockout.all);
+router.post('/stockout', ctrlStockout.add);
 router.get('/stockout/warehouse', ctrlStockout.warehouse);
 router.get('/stockout/users', ctrlStockout.users);
 router.get('/stockout/detail/:id', ctrlStockout.detail);
@@ -118,9 +126,11 @@ router.get('/request_detail', ctrlRequestDetail.all);
 
 // stock in detail 
 router.get('/stockin_detail', ctrlStockinDetail.all);
+router.post('/stockin_detail', ctrlStockinDetail.add);
 
 // stock out detail 
 router.get('/stockout_detail', ctrlStockoutDetail.all);
+router.post('/stockout_detail', ctrlStockoutDetail.add);
 
 module.exports = router;
 
