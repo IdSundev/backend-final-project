@@ -20,6 +20,7 @@ const ctrlRequestDetail = require("../controllers/request_detail");
 const ctrlStockinDetail = require("../controllers/stockin_detail");
 const ctrlStockoutDetail = require("../controllers/stockout_detail");
 const ctrlUsers = require("../controllers/users");
+const ctrlSales = require("../controllers/sales");
 
 // multer configuration for save image product
 const storage_img_products = multer.diskStorage({
@@ -77,6 +78,9 @@ router.get('/stocks/detail', ctrlStock.detail);
 
 // request
 router.get('/requests', ctrlRequests.all);
+router.get('/requests/select/:id', ctrlRequests.selectOne);
+router.get('/requests/other/:id', ctrlRequests.selectOther);
+router.post('/requests', ctrlRequests.add);
 router.get('/requests/detail/:id', ctrlRequests.detail);
 router.get('/requests/warehouse', ctrlRequests.warehouse);
 
@@ -123,6 +127,7 @@ router.get('/village', ctrlVillage.all);
 
 // request detail 
 router.get('/request_detail', ctrlRequestDetail.all);
+router.post('/request_detail', ctrlRequestDetail.add);
 
 // stock in detail 
 router.get('/stockin_detail', ctrlStockinDetail.all);
@@ -131,6 +136,10 @@ router.post('/stockin_detail', ctrlStockinDetail.add);
 // stock out detail 
 router.get('/stockout_detail', ctrlStockoutDetail.all);
 router.post('/stockout_detail', ctrlStockoutDetail.add);
+
+// sales report and revenue
+router.get('/sales_report', ctrlSales.all);
+router.get('/sales_report/detail/:id', ctrlSales.detail);
 
 module.exports = router;
 

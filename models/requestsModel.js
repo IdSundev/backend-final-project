@@ -42,3 +42,36 @@ exports.detailRequest = (data) => {
     });
   });
 };
+
+exports.insert = (data) => {
+  return new Promise((resolve, reject) => {
+    let sql = `INSERT INTO request(id_original_warehouse,id_destination_warehouse,request_date,accepted,reject,reason_for_reject) values(${data.id_original_warehouse},${data.id_destination_warehouse},now(),null,null,null)`;
+
+    pool.query(sql, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  });
+};
+
+exports.selectOtherWarehouse = (data) => {
+  return new Promise((resolve, reject) => {
+    // let sql = `SELECT * FROM users WHERE token='${data.token}'`;
+    let sql = `SELECT w.id_warehouse, w.detail_address, v.village, v.lat, v.lon FROM warehouse as w INNER JOIN village as v ON w.id_village = v.id_village WHERE id_warehouse != ${data.id_original_warehouse}`;
+    pool.query(sql, (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+};
+
+exports.selectWarehouse = (data) => {
+  return new Promise((resolve, reject) => {
+    // let sql = `SELECT * FROM users WHERE token='${data.token}'`;
+    let sql = `SELECT w.id_warehouse, w.detail_address, v.village, v.lat, v.lon FROM warehouse as w INNER JOIN village as v ON w.id_village = v.id_village WHERE id_warehouse = ${data.id_original_warehouse}`;
+    pool.query(sql, (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+};

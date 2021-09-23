@@ -10,3 +10,14 @@ exports.selectAll = (data) => {
     });
   });
 };
+
+exports.insert = (data) => {
+  return new Promise((resolve, reject) => {
+    let sql = `INSERT INTO request_detail(id_request,id_product,quantity) values(${data.id_request},${data.id_product},${data.quantity})`;
+
+    pool.query(sql, (err, res) => {
+      if (err) reject(err);
+      resolve(res);
+    });
+  });
+};

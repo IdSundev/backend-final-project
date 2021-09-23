@@ -1,14 +1,19 @@
-const Requests = require("../models/requestsModel");
-const platform = require("../platform");
-const turf = require('@turf/turf');
+const Sales = require("../models/salesModel");
 
 exports.all = async (req, res) => {
+  // Select All
+  // let selectAll = Products.selectAll();
+  // selectAll.then((result) => {
+  //   res.json(result);
+  //   return;
+  // });
+
   let amountOfData, amountOfPage, previous, next, position, page;
   let id_warehouse = req.query.id_warehouse;
   let pages = [];
-  let limit = 10;
+  let limit = 8;
 
-  Requests.countRequests(id_warehouse).then((result) => {
+  Sales.countSales().then((result) => {
     amountOfData = result;
     amountOfPage = Math.ceil(amountOfData / limit);
     page = !req.query.page
@@ -46,11 +51,11 @@ exports.all = async (req, res) => {
       position,
       id_warehouse,
     };
-    let selectRequests = Requests.selectRequests(data);
-    selectRequests.then((result) => {
+    let selectSales = Sales.selectSales(data);
+    selectSales.then((result) => {
       res.json({
         page: page,
-        request: result,
+        sales: result,
         links: {
           first_page: 1,
           previous: previous,
@@ -63,20 +68,11 @@ exports.all = async (req, res) => {
   });
 };
 
-exports.warehouse = async (req, res) => {
-  // Select All Warehouse
-  let selectAllWarehouse = Requests.selectAllWarehouse();
-  selectAllWarehouse.then((result) => {
-    res.json(result);
-    return;
-  });
-};
-
 exports.detail = async (req, res) => {
   let data = {
-    id_request: req.params.id,
+    id_transaction: req.params.id,
   };
-  let result = Requests.detailRequest(data);
+  let result = Sales.detailSales(data);
   result
     .then(function (result) {
       if (result.length > 0) {
@@ -97,51 +93,4 @@ exports.detail = async (req, res) => {
         message: err,
       });
     });
-};
-
-exports.add = async (req, res) => {
-  let data = await {
-    id_original_warehouse: req.body.id_original_warehouse,
-    id_destination_warehouse: req.body.id_destination_warehouse,
-    // request_date: req.body.request_date,
-  };
-  let result = Requests.insert(data);
-  result
-    .then((result) => {
-      res.json({
-        status: 200,
-        success: true,
-        id_request: result.insertId,
-      });
-    })
-    .catch((err) => {
-      res.json({
-        status: 500,
-        success: false,
-        message: err,
-      });
-    });
-  return;
-};
-
-exports.selectOne = async (req, res) => {
-  let data = await {
-    id_original_warehouse: req.params.id,
-  };
-  let warehouse = Requests.selectWarehouse(data);
-  warehouse.then((result) => {
-    res.json(result);
-    return;
-  });
-};
-
-exports.selectOther = async (req, res) => {
-  let data = await {
-    id_original_warehouse: req.params.id,
-  };
-  let warehouse = Requests.selectOtherWarehouse(data);
-  warehouse.then((result) => {
-    res.json(result);
-    return;
-  });
 };
