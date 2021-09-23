@@ -32,3 +32,14 @@ exports.detailSales = (data) => {
     });
   });
 };
+
+exports.graph = (data) => {
+  return new Promise((resolve, reject) => {
+    // let sql = `SELECT * FROM users WHERE token='${data.token}'`;
+    let sql = `SELECT id_warehouse, DATE_FORMAT(order_time_complete, "%Y") AS year, DATE_FORMAT(order_time_complete, "%M") AS month, DATE_FORMAT(order_time_complete, "%Y-%m") AS ym, COUNT(id_transaction) AS count FROM transactions WHERE DATE_FORMAT(order_time_complete, "%Y") = DATE_FORMAT(NOW(), "%Y") AND id_warehouse=${data.id_warehouse} GROUP BY YM  ORDER BY order_time_complete`;
+    pool.query(sql, (err, result) => {
+      if (err) reject(err);
+      resolve(result);
+    });
+  });
+};

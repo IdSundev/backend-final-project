@@ -21,6 +21,7 @@ const ctrlStockinDetail = require("../controllers/stockin_detail");
 const ctrlStockoutDetail = require("../controllers/stockout_detail");
 const ctrlUsers = require("../controllers/users");
 const ctrlSales = require("../controllers/sales");
+const ctrlRevenue = require("../controllers/revenue");
 
 // multer configuration for save image product
 const storage_img_products = multer.diskStorage({
@@ -140,6 +141,14 @@ router.post('/stockout_detail', ctrlStockoutDetail.add);
 // sales report and revenue
 router.get('/sales_report', ctrlSales.all);
 router.get('/sales_report/detail/:id', ctrlSales.detail);
+// graph
+router.get('/sales_report/graph', ctrlSales.graph);
+
+// get all revenue
+router.get('/revenue/all', ctrlRevenue.all);
+router.get('/revenue/list-year', ctrlRevenue.listYear);
+router.get('/revenue/year', ctrlRevenue.year);
+router.get('/revenue/month', ctrlRevenue.month);
 
 module.exports = router;
 
