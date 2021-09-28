@@ -1,6 +1,5 @@
 const Requests = require("../models/requestsModel");
 const platform = require("../platform");
-const turf = require('@turf/turf');
 
 exports.all = async (req, res) => {
   let amountOfData, amountOfPage, previous, next, position, page;
