@@ -24,6 +24,7 @@ const ctrlSales = require("../controllers/sales");
 const ctrlRevenue = require("../controllers/revenue");
 const ctrlUserTransaction = require("../controllers/user_transaction")
 const ctrlUserTransactionNew = require("../controllers/user_transaction_new")
+const ctrlAuth = require('../controllers/Auth')
 
 // multer configuration for save image product
 const storage_img_products = multer.diskStorage({
@@ -120,6 +121,8 @@ router.get('/user-transaction/detail/:id', ctrlUserTransaction.detail);
 // admin
 router.get('/admin', ctrlAdmin.all);
 router.post('/admin', ctrlAdmin.add)
+router.post('/admin/login', ctrlAuth.login)
+
 
 // warehouse
 router.get('/warehouse', ctrlWarehouse.all);
