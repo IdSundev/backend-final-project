@@ -2,75 +2,78 @@ const Stockin = require("../models/stockinModel");
 const platform = require("../platform");
 
 exports.all = async (req, res) => {
-
   let amountOfData, amountOfPage, previous, next, position, page;
   let id_warehouse = req.query.id_warehouse;
   let pages = [];
   let limit = 8;
 
   Stockin.countStockin(id_warehouse).then((result) => {
-    amountOfData = result;
-    amountOfPage = Math.ceil(amountOfData / limit);
-    page = !req.query.page
-      ? 1
-      : parseInt(req.query.page) > amountOfPage
-      ? amountOfPage
-      : parseInt(req.query.page);
+    if (result > 0) {
+      amountOfData = result;
+      amountOfPage = Math.ceil(amountOfData / limit);
+      page = !req.query.page
+        ? 1
+        : parseInt(req.query.page) > amountOfPage
+        ? amountOfPage
+        : parseInt(req.query.page);
 
-    previous = page > 1 ? page - 1 : false;
-    next = page >= amountOfPage ? false : page + 1;
-    // first page number
-    page > 3 ? pages.push("...") : "";
-    for (i = page - 2; i < page; i++) {
-      if (i < 1) {
-        continue;
+      previous = page > 1 ? page - 1 : false;
+      next = page >= amountOfPage ? false : page + 1;
+      // first page number
+      page > 3 ? pages.push("...") : "";
+      for (i = page - 2; i < page; i++) {
+        if (i < 1) {
+          continue;
+        }
+        pages.push(i);
       }
-      pages.push(i);
-    }
-    // middle page number
-    pages.push(page);
-    for (i = page + 1; i < page + 3; i++) {
-      if (i > amountOfPage) {
-        break;
+      // middle page number
+      pages.push(page);
+      for (i = page + 1; i < page + 3; i++) {
+        if (i > amountOfPage) {
+          break;
+        }
+        pages.push(i);
       }
-      pages.push(i);
-    }
-    // last page number
-    if (page + 2 < amountOfPage) {
-      pages.push("...");
-      pages.push(amountOfPage);
-    }
-    position = page === 1 ? 0 : (page - 1) * limit;
-    let data = {
-      limit,
-      position,
-      id_warehouse,
-    };
-    let selectStockin = Stockin.selectStockin(data);
-    selectStockin.then((result) => {
-      res.json({
-        page: page,
-        stockin: result,
-        links: {
-          first_page: 1,
-          previous: previous,
-          pages: pages,
-          next: next,
-          last_page: amountOfPage,
-        },
+      // last page number
+      if (page + 2 < amountOfPage) {
+        pages.push("...");
+        pages.push(amountOfPage);
+      }
+      position = page === 1 ? 0 : (page - 1) * limit;
+      let data = {
+        limit,
+        position,
+        id_warehouse,
+      };
+      let selectStockin = Stockin.selectStockin(data);
+      selectStockin.then((result) => {
+        if (result.length > 0) {
+          res.json({
+            page: page,
+            stockin: result,
+            links: {
+              first_page: 1,
+              previous: previous,
+              pages: pages,
+              next: next,
+              last_page: amountOfPage,
+            },
+          });
+        }
       });
-    });
+    }
   });
 };
 
-exports.warehouse = async (req,res) => {
+exports.warehouse = async (req, res) => {
   // Select All Warehouse
   let selectAllWarehouse = Stockin.selectAllWarehouse();
   selectAllWarehouse.then((result) => {
     res.json(result);
     return;
   });
-}
+};
 
 exports.detail = async (req, res) => {
   let data = {
@@ -104,7 +107,7 @@ exports.add = async (req, res) => {
     id_original_warehouse: req.body.id_original_warehouse,
     id_destination_warehouse: req.body.id_destination_warehouse,
     date_of_entry: req.body.date_of_entry,
-    description: req.body.description
+    description: req.body.description,
   };
   let result = Stockin.insert(data);
   result
@@ -112,7 +115,7 @@ exports.add = async (req, res) => {
       res.json({
         status: 200,
         success: true,
-        id_stock_in: result.insertId
+        id_stock_in: result.insertId,
       });
     })
     .catch((err) => {

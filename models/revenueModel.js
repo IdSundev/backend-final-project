@@ -14,7 +14,7 @@ exports.selectAllRevenue = (data) => {
 exports.listYear = (data) => {
   return new Promise((resolve, reject) => {
     // let sql = `SELECT * FROM users WHERE token='${data.token}'`;
-    let sql = `SELECT id_warehouse, DATE_FORMAT(order_time_complete, "%Y") AS year FROM transactions WHERE id_warehouse=${data.id_warehouse} GROUP BY year`;
+    let sql = `SELECT id_warehouse, DATE_FORMAT(order_time_complete, "%Y") AS year FROM transactions WHERE id_warehouse=${data.id_warehouse} AND DATE_FORMAT(order_time_complete, "%Y") IS NOT NULL GROUP BY year`;
     pool.query(sql, (err, result) => {
       if (err) reject(err);
       resolve(result);
