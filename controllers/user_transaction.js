@@ -1,13 +1,14 @@
-const Requests = require("../models/requestsModel");
+const userTransaction = require("../models/userTransactionModel");
 const platform = require("../platform");
 
 exports.all = async (req, res) => {
+
   let amountOfData, amountOfPage, previous, next, position, page;
-  let id_warehouse = req.query.id_warehouse;
+  let id_transaction = req.query.id_transaction;
   let pages = [];
   let limit = 10;
 
-  Requests.countRequests(id_warehouse).then((result) => {
+  userTransaction.countUserTransaction().then((result) => {
     amountOfData = result;
     amountOfPage = Math.ceil(amountOfData / limit);
     page = !req.query.page
@@ -43,13 +44,13 @@ exports.all = async (req, res) => {
     let data = {
       limit,
       position,
-      id_warehouse,
+      id_transaction,
     };
-    let selectRequests = Requests.selectRequests(data);
-    selectRequests.then((result) => {
+    let selectUserTransaction = userTransaction.selectUserTransaction(data);
+    selectUserTransaction.then((result) => {
       res.json({
         page: page,
-        request: result,
+        userTransaction: result,
         links: {
           first_page: 1,
           previous: previous,
@@ -62,20 +63,20 @@ exports.all = async (req, res) => {
   });
 };
 
-exports.warehouse = async (req, res) => {
-  // Select All Warehouse
-  let selectAllWarehouse = Requests.selectAllWarehouse();
-  selectAllWarehouse.then((result) => {
-    res.json(result);
-    return;
-  });
-};
+// exports.warehouse = async (req,res) => {
+//   // Select All Warehouse
+//   let selectAllWarehouse = Requestsin.selectAllWarehouse();
+//   selectAllWarehouse.then((result) => {
+//     res.json(result);
+//     return;
+//   });
+// }
 
 exports.detail = async (req, res) => {
   let data = {
-    id_request: req.params.id,
+    id_transaction: req.params.id,
   };
-  let result = Requests.detailRequest(data);
+  let result = userTransaction.detailUserTransaction(data);
   result
     .then(function (result) {
       if (result.length > 0) {
@@ -98,49 +99,49 @@ exports.detail = async (req, res) => {
     });
 };
 
-exports.add = async (req, res) => {
-  let data = await {
-    id_original_warehouse: req.body.id_original_warehouse,
-    id_destination_warehouse: req.body.id_destination_warehouse,
-    // request_date: req.body.request_date,
-  };
-  let result = Requests.insert(data);
-  result
-    .then((result) => {
-      res.json({
-        status: 200,
-        success: true,
-        id_request: result.insertId,
-      });
-    })
-    .catch((err) => {
-      res.json({
-        status: 500,
-        success: false,
-        message: err,
-      });
-    });
-  return;
-};
+// exports.accepted = async (req, res) => {
+//   let data = await {
+//     id_request: req.body.id_request,
+//   };
+//   // console.log(data)
+//   let result = Requestsin.accepted(data);
+//   result
+//     .then((result) => {
+//       res.json({
+//         status: 200,
+//         success: true,
+//       });
+//     })
+//     .catch((err) => {
+//       res.json({
+//         status: 500,
+//         success: false,
+//         message: err,
+//       });
+//     });
+//   return;
+// };
 
-exports.selectOne = async (req, res) => {
-  let data = await {
-    id_original_warehouse: req.params.id,
-  };
-  let warehouse = Requests.selectWarehouse(data);
-  warehouse.then((result) => {
-    res.json(result);
-    return;
-  });
-};
-
-exports.selectOther = async (req, res) => {
-  let data = await {
-    id_original_warehouse: req.params.id,
-  };
-  let warehouse = Requests.selectOtherWarehouse(data);
-  warehouse.then((result) => {
-    res.json(result);
-    return;
-  });
-};
+// exports.reject = async (req, res) => {
+//   let data = await {
+//     id_request: req.body.id_request,
+//     reason_for_reject: req.body.reason_for_reject,
+//   };
+//   // console.log(data)
+//   let result = Requestsin.reject(data);
+//   result
+//     .then((result) => {
+//       res.json({
+//         status: 200,
+//         success: true,
+//       });
+//     })
+//     .catch((err) => {
+//       res.json({
+//         status: 500,
+//         success: false,
+//         message: err,
+//       });
+//     });
+//   return;
+// };

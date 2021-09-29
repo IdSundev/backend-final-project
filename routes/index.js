@@ -22,6 +22,8 @@ const ctrlStockoutDetail = require("../controllers/stockout_detail");
 const ctrlUsers = require("../controllers/users");
 const ctrlSales = require("../controllers/sales");
 const ctrlRevenue = require("../controllers/revenue");
+const ctrlUserTransaction = require("../controllers/user_transaction")
+const ctrlUserTransactionNew = require("../controllers/user_transaction_new")
 
 // multer configuration for save image product
 const storage_img_products = multer.diskStorage({
@@ -105,6 +107,15 @@ router.post('/stockout', ctrlStockout.add);
 router.get('/stockout/warehouse', ctrlStockout.warehouse);
 router.get('/stockout/users', ctrlStockout.users);
 router.get('/stockout/detail/:id', ctrlStockout.detail);
+
+
+// user transaction
+router.get('/user-transaction', ctrlUserTransaction.all);
+router.get('/admin/new-transaction', ctrlUserTransactionNew.all);
+router.get('/user-transaction/detail/:id', ctrlUserTransaction.detail);
+// router.get('/requestsin/warehouse', ctrlRequestsin.warehouse);
+// router.post('/requestin/accepted', ctrlRequestsin.accepted);
+// router.post('/requestin/reject', ctrlRequestsin.reject);
 
 // admin
 router.get('/admin', ctrlAdmin.all);
